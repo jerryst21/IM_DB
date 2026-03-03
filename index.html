@@ -35,36 +35,69 @@
                 Hitung Estimasi Pajak
             </button>
 
-            <div id="resultArea" class="hidden mt-8 border-t pt-6">
+<div id="resultArea" class="hidden mt-8 border-t pt-6">
                 <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                    <span class="bg-blue-100 text-blue-600 p-1 rounded mr-2">📊</span> Rincian Kewajiban Pajak
+                    <span class="bg-blue-100 text-blue-600 p-1 rounded mr-2">📊</span> Estimasi Pajak Utama
                 </h3>
 
-                <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div class="p-4 bg-red-50 rounded-xl border border-red-100">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-red-800 font-semibold text-sm">Penjual (PPh Final)</span>
-                            <span class="bg-red-200 text-red-800 text-[10px] px-2 py-1 rounded-full font-bold uppercase">Wajib Bayar</span>
-                        </div>
-                        <div id="pphValue" class="text-2xl font-bold text-red-700">Rp 0</div>
-                        <p class="text-xs text-red-600 mt-1">Dasar hukum: 2,5% dari nilai transaksi.</p>
+                        <span class="text-red-800 font-semibold text-xs uppercase tracking-wider">Penjual (PPh Final)</span>
+                        <div id="pphValue" class="text-2xl font-bold text-red-700 mt-1">Rp 0</div>
+                        <p class="text-[10px] text-red-600 mt-1 italic">Tarif: 2,5% dari Harga Transaksi</p>
                     </div>
 
                     <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-emerald-800 font-semibold text-sm">Pembeli (BPHTB)</span>
-                            <span class="bg-emerald-200 text-emerald-800 text-[10px] px-2 py-1 rounded-full font-bold uppercase">Wajib Bayar</span>
-                        </div>
-                        <div id="bphtbValue" class="text-2xl font-bold text-emerald-700">Rp 0</div>
-                        <p class="text-xs text-emerald-600 mt-1">Estimasi: 5% x (Nilai - NPOPTK*). <br>*Asumsi NPOPTK standar Rp60jt.</p>
+                        <span class="text-emerald-800 font-semibold text-xs uppercase tracking-wider">Pembeli (BPHTB)</span>
+                        <div id="bphtbValue" class="text-2xl font-bold text-emerald-700 mt-1">Rp 0</div>
+                        <p class="text-[10px] text-emerald-600 mt-1 italic">Tarif: 5% x (Harga - NPOPTK)</p>
                     </div>
                 </div>
 
-                <div class="mt-6 p-4 bg-gray-100 rounded-lg text-xs text-gray-600 leading-relaxed">
-                    <strong>Catatan Penting:</strong> 
-                    Hasil ini adalah estimasi. Besaran NPOPTK berbeda-beda di setiap kabupaten/kota. 
-                    Belum termasuk biaya akta Notaris/PPAT dan PNBP di kantor pertanahan.
+                <div class="bg-blue-50 rounded-xl border border-blue-100 p-5">
+                    <h4 class="text-blue-800 font-bold text-sm mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                        Estimasi Biaya Lainnya
+                    </h4>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-blue-900">
+                            <thead>
+                                <tr class="border-b border-blue-200">
+                                    <th class="py-2">Jenis Biaya</th>
+                                    <th class="py-2">Estimasi / Dasar Hitung</th>
+                                    <th class="py-2 text-right">Penanggung Jawab</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-blue-100">
+                                <tr>
+                                    <td class="py-2 font-medium">Jasa Notaris/PPAT</td>
+                                    <td class="py-2">0,5% - 1% dari nilai transaksi</td>
+                                    <td class="py-2 text-right">Kesepakatan / Pembeli</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 font-medium">Cek Sertifikat</td>
+                                    <td class="py-2">± Rp 50.000 - Rp 100.000</td>
+                                    <td class="py-2 text-right">Pembeli</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 font-medium">Biaya Balik Nama (BBN)</td>
+                                    <td class="py-2">Tarif PNBP di Kantor Pertanahan</td>
+                                    <td class="py-2 text-right">Pembeli</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 font-medium">Pajak PBB</td>
+                                    <td class="py-2">Pastikan sudah lunas tahun berjalan</td>
+                                    <td class="py-2 text-right">Penjual</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
+                <p class="mt-4 text-[10px] text-gray-500 italic leading-relaxed text-center">
+                    *Besaran biaya di atas dapat bervariasi tergantung kebijakan daerah dan kesepakatan para pihak.
+                </p>
             </div>
         </div>
     </div>
