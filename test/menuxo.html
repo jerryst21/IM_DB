@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resto Pro SPA v4</title>
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --primary: #d4a017;
+                --bg: #ffffff;
+                --surface: #f8f9fa;
+                --text: #1a1a1a;
+                --text-muted: #666;
+                --border: #eeeeee;
+            }
+
+            [data-theme="dark"] {
+                --primary: #ffcc00;
+                --bg: #121212;
+                --surface: #1e1e1e;
+                --text: #ffffff;
+                --text-muted: #aaaaaa;
+                --border: #333333;
+            }
+
+            html {
+                scrollbar-gutter: stable;
+            }
+
+            body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                margin: 0;
+                background-color: var(--bg);
+                color: var(--text);
+                transition: background 0.3s;
+                padding-bottom: 100px;
+                /* Tambahan agar font terlihat lebih tajam */
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+
+            .app-container {
+                width: 100%;
+                max-width: 500px; /* UBAH ANGKA INI untuk mengatur lebar */
+                margin: 0 auto;   /* Membuat konten berada di tengah layar */
+                min-height: 100vh;
+                background: var(--bg);
+                position: relative;
+                box-shadow: 0 0 20px rgba(0,0,0,0.1); /* Opsional: memberi efek bayangan di sisi */
+            }
+
+            header {
+                position: sticky;
+                top: 0;
+                background: var(--bg);
+                padding: 15px 15px 10px 15px;
+                z-index: 1000;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .top-row { display: flex; align-items: center; gap: 10px; }
+            .search-wrapper { flex: 1; position: relative; }
+            .search-bar {
+                width: 100%;
+                padding: 10px 15px 10px 40px;
+                border-radius: 20px;
+                border: 1px solid var(--text-muted);
+                background: var(--surface);
+                color: var(--text);
+                outline: none;
+                box-sizing: border-box;
+                transition: border-color 0.2s ease;
+            }
+
+            .search-bar:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 1px var(--primary);
+            }
+
+            .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+            .theme-toggle { background: var(--surface); border: 1px solid var(--border); padding: 8px; border-radius: 50%; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+            /* Styles untuk Dropdown Baru */
+            .category-container {
+                margin-top: 12px;
+                display: flex;
+                align-items: center;
+            }
+
+            .dropdown-wrapper {
+                position: relative;
+                width: 100%;
+                max-width: 180px;
+            }
+
+            .category-dropdown {
+                width: 100%;
+                padding: 8px 35px 8px 15px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: var(--text);
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                appearance: none;
+                cursor: pointer;
+                outline: none;
+                transition: all 0.2s;
+            }
+
+            .category-dropdown:focus {
+                border-color: var(--primary);
+            }
+
+            .dropdown-chevron {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                pointer-events: none;
+                color: var(--text-muted);
+            }
+
+            .page { display: none; padding: 15px; animation: fadeIn 0.3s ease; }
+            .page.active { display: block; }
+
+            h2 { font-size: 1.2rem; margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 10px; }
+
+            .menu-grid { display: grid; gap: 12px; }
+            .menu-card { display: flex; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; cursor: pointer; }
+            .menu-img { width: 85px; height: 85px; background: #444; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+            .menu-info { padding: 10px; flex: 1; font-size: 0.95rem; font-weight: 700;}
+            .menu-info h3 { margin: 0 0 4px 0; font-size: 0.95rem; }
+            .menu-info p { font-size: 0.75rem; color: var(--text-muted); margin: 0 0 6px 0; line-height: 1.2; }
+            .price { color: var(--primary); font-weight: 800; font-size: 0.9rem; }
+
+            .category-header {
+                font-size: 0.8rem;
+                font-weight: 700;
+                color: var(--primary);
+                padding: 15px 5px 5px 5px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            .menu-img img{
+                width:100%;
+                height:100%;
+                object-fit:cover;
+            }
+
+            .modal-img-container{
+                width:100%;
+                height:260px;
+                overflow:hidden;
+                border-radius:18px 18px 0 0;
+            }
+
+            .modal-img-container img{
+                width:100%;
+                height:100%;
+                object-fit:cover;
+            }
+
+            .modal-emoji{
+                font-size:120px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                height:260px;
+            }
+
+            /* Promo & Bottom Nav Styles */
+            .promo-banner { background: var(--surface); border-radius: 15px; overflow: hidden; margin-bottom: 20px; border: 1px solid var(--border); }
+            .promo-img { width: 100%; height: 180px; background: #ddd; display: flex; align-items: center; justify-content: center; position: relative; }
+            .promo-badge { position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; padding: 4px 10px; border-radius: 5px; font-size: 0.7rem; }
+            .promo-content { padding: 15px; }
+            .promo-content h3 { margin: 0 0 5px 0; font-size: 1.1rem; }
+
+            .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--bg); display: flex; justify-content: space-around; align-items: center; padding: 8px 0; border-top: 1px solid var(--border); z-index: 1001; max-width: 500px; left: 50% !important;
+                transform: translateX(-50%);}
+            .nav-item { text-decoration: none; color: var(--text-muted); font-size: 0.7rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+            .nav-item.active { color: var(--primary); }
+            .logo-center { background: var(--primary); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: -40px; border: 4px solid var(--bg); }
+
+            /* Modal Styles */
+            .modal-overlay{
+                display:none;
+                position:fixed;
+                top:0;
+                left:0;
+                width:100%;
+                height:100%;
+                background:rgba(0,0,0,0.6);
+                justify-content:center;
+                align-items:center;
+                z-index:999;
+            }
+
+            .brand-logo {
+                font-family: 'Playfair Display', serif;
+                font-style: italic;
+                font-weight: 800;
+                font-size: 1.6rem;
+                letter-spacing: -1px; /* Huruf sedikit merapat untuk gaya klasik */
+                color: #000000;
+                text-shadow: 
+                    0.2px 0 0 #000, 
+                    -0.2px 0 0 #000, 
+                    0 0.2px 0 #000, 
+                    0 -0.2px 0 #000;
+                /* Memastikan render font tajam di semua browser */
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+
+            /* Opsional: Memberi aksen garis kecil di bawah jika ingin lebih bergaya */
+            .brand-logo::after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 1px;
+                background: #d4a017; /* Warna emas/cokelat seperti gambar Anda */
+                margin-top: 2px;
+                transform: scaleX(0.5); /* Garis hanya sepanjang setengah teks */
+            }
+
+            .modal-content {
+                width: 85%; max-width: 350px; background: #000; border-radius: 25px; overflow: hidden; position: relative;
+                animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            .modal-close { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px; border-radius: 50%; display: flex; cursor: pointer; }
+            .modal-img-container { width: 100%; aspect-ratio: 1/1; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 8rem; }
+            .modal-info-fixed { background: #000; padding: 20px 15px; text-align: center; }
+            .modal-info-fixed h2 { margin: 0; font-size: 1.3rem; color: #fff; border: none; }
+            .modal-info-fixed p { margin: 6px 0 0 0; color: var(--primary); font-weight: bold; }
+
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+            @keyframes zoomIn { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
+        </style>
+    </head>
+    <body data-theme="light">
+        <div class="app-container">
+            <header id="mainHeader">
+                <div class="top-row">
+                    <div class="search-wrapper">
+                        <i data-lucide="search" class="search-icon" size="18"></i>
+                        <input type="text" id="searchInput" class="search-bar" placeholder="Cari menu..." onkeyup="filterItems()">
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i id="themeIcon" data-lucide="moon" size="20"></i>
+                    </button>
+                </div>
+
+                <div class="category-container">
+                    <div class="dropdown-wrapper">
+                        <select id="categorySelect" class="category-dropdown" onchange="setCategory(this.value)">
+                            <option value="Semua">Semua Kategori</option>
+                            <option value="Makanan">Makanan</option>
+                            <option value="Minuman">Minuman</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="dropdown-chevron" size="16"></i>
+                    </div>
+                </div>
+            </header>
+
+            <section id="menu-page" class="page active">
+                <h2 id="menuTitle">Daftar Menu</h2>
+                <div class="menu-grid" id="menuList"></div>
+            </section>
+
+            <section id="paket-page" class="page">
+                <h2>Paket Hemat</h2>
+                <div class="menu-grid" id="paketList"></div>
+            </section>
+
+            <div id="noResults" style="display: none; text-align: center; padding: 40px 20px; color: var(--text-muted);">
+                <i data-lucide="search-x" size="48" style="margin-bottom: 12px; opacity: 0.5;"></i>
+                <p>Maaf! Menu yang Anda cari tidak ditemukan.</p>
+            </div>
+
+            <section id="promo-page" class="page">
+                <h2>Promo & Sponsor</h2>
+                <div class="promo-banner">
+                    <div class="promo-img">
+                        <span style="font-size: 3rem;">🥤</span>
+                        <div class="promo-badge">SPONSORED</div>
+                    </div>
+                    <div class="promo-content">
+                        <h3>Segarkan Harimu dengan Coca-Cola</h3>
+                        <p>Beli 2 Menu Makanan apa saja, dapatkan 1 botol Coca-Cola dingin gratis!</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="kontak-page" class="page">
+                <h2>Kontak Kami</h2>
+                <div style="background:var(--surface); padding:20px; border-radius:15px; border: 1px solid var(--border);">
+                    <p><strong>📍 Lokasi:</strong> Jl. Boulevard No. 88, Manado</p>
+                    <p><strong>📞 WhatsApp:</strong> 0812-4455-6677</p>
+                </div>
+            </section>
+
+            <nav class="bottom-nav">
+                <a href="#" class="nav-item active" onclick="navigate('menu', this)">
+                    <i data-lucide="utensils"></i>
+                    <span>MENU</span>
+                </a>
+                <a href="#" class="nav-item" onclick="navigate('paket', this)">
+                    <i data-lucide="package"></i>
+                    <span>PAKET</span>
+                </a>
+                <div class="logo-center">
+                    <span class="brand-logo">XO</span>
+                </div>
+                <a href="#" class="nav-item" onclick="navigate('promo', this)">
+                    <i data-lucide="megaphone"></i>
+                    <span>PROMO</span>
+                </a>
+                <a href="#" class="nav-item" onclick="navigate('kontak', this)">
+                    <i data-lucide="info"></i>
+                    <span>KONTAK</span>
+                </a>
+            </nav>
+
+            <div id="itemModal" class="modal-overlay" onclick="closeModal()">
+                <div class="modal-content" onclick="event.stopPropagation()">
+                    <button class="modal-close" onclick="closeModal()">
+                        <i data-lucide="x" size="24"></i>
+                    </button>
+                    <div class="modal-img-container">
+                        <img id="modalImg" src="">
+                        <div id="modalEmoji" class="modal-emoji"></div>
+                    </div>
+                    <div class="modal-info-fixed">
+                        <h2 id="modalTitle">Judul Menu</h2>
+                        <p id="modalPrice">Rp 0k</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            let currentCategory = 'Semua';
+            let currentPage = "menu";
+
+            const rawData = [
+                { id: 1, cat: 'Makanan', type: 'menu', title: "Ayam Goreng Lengkuas", price: "25k", desc: "Ayam kampung bumbu rempah.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuI0M3rEryxbHkwq0i5cAgAN1iNdK8_ldraA&s" },
+                { id: 2, cat: 'Makanan', type: 'menu', title: "Nasi Goreng Spesial", price: "30k", desc: "Nasi goreng topping komplit.", img: "https://assets.unileversolutions.com/recipes-v2/258063.jpg" },
+                { id: 3, cat: 'Makanan', type: 'menu', title: "Sate Ayam Madura", price: "28k", desc: "10 tusuk sate bumbu kacang.", img: "https://assets.pikiran-rakyat.com/crop/0x0:0x0/720x0/webp/photo/2021/10/12/460178680.jpg" },
+                { id: 4, cat: 'Makanan', type: 'menu', title: "Mie Goreng Jawa", price: "22k", desc: "Mie kuning dengan sayur segar.", img: "https://whattocooktoday.com/wp-content/uploads/2010/11/mie-goreng-jawa-21.jpg" },
+                { id: 5, cat: 'Makanan', type: 'menu', title: "Rawon Daging", price: "35k", desc: "Khas Jawa Timur dengan kluwek.", img: "🍲" },
+                { id: 6, cat: 'Makanan', type: 'menu', title: "Gado-Gado", price: "18k", desc: "Sayuran siram saus kacang.", img: "🥗" },
+                { id: 7, cat: 'Makanan', type: 'menu', title: "Ikan Bakar Rica", price: "45k", desc: "Ikan laut segar bumbu pedas.", img: "🐟" },
+                { id: 8, cat: 'Makanan', type: 'menu', title: "Soto Betawi", price: "32k", desc: "Kuah santan daging sapi gurih.", img: "🥣" },
+                { id: 9, cat: 'Makanan', type: 'menu', title: "Rendang Sapi", price: "38k", desc: "Daging empuk bumbu padang.", img: "🥩" },
+                { id: 10, cat: 'Makanan', type: 'menu', title: "Capcay Seafood", price: "25k", desc: "Tumis sayur dengan udang.", img: "🥦" },
+                { id: 11, cat: 'Minuman', type: 'menu', title: "Es Kopi Susu", price: "15k", desc: "Kopi susu gula aren.", img: "🥤" },
+                { id: 12, cat: 'Minuman', type: 'menu', title: "Teh Tarik Dingin", price: "12k", desc: "Teh susu khas melayu.", img: "🧋" },
+                { id: 13, cat: 'Minuman', type: 'menu', title: "Juice Mangga", price: "18k", desc: "Buah mangga segar.", img: "🍹" },
+                { id: 14, cat: 'Minuman', type: 'menu', title: "Es Jeruk Peras", price: "10k", desc: "Jeruk lokal asli.", img: "🍹" },
+                { id: 15, cat: 'Minuman', type: 'menu', title: "Lemon Tea", price: "12k", desc: "Teh dengan lemon.", img: "🍋" },
+                { id: 16, cat: 'Minuman', type: 'menu', title: "Soda Gembira", price: "15k", desc: "Soda, susu, sirup.", img: "🍷" },
+                { id: 17, cat: 'Snack', type: 'menu', title: "Pisang Goreng Keju", price: "15k", desc: "Pisang manis keju.", img: "🍌" },
+                { id: 18, cat: 'Snack', type: 'menu', title: "Tempe Mendoan", price: "12k", desc: "5 tempe goreng tepung.", img: "🧇" },
+                { id: 19, cat: 'Snack', type: 'menu', title: "Cireng Bumbu Rujak", price: "15k", desc: "Cireng kenyal saus pedas.", img: "🥯" },
+                { id: 20, cat: 'Snack', type: 'menu', title: "Kentang Goreng", price: "20k", desc: "French fries gurih.", img: "🍟" },
+                { id: 21, cat: 'Makanan', type: 'paket', title: "Paket Hemat A", price: "40k", desc: "Nasi + Ayam + Es Teh.", img: "🍱" },
+                { id: 22, cat: 'Makanan', type: 'paket', title: "Paket Hemat B", price: "35k", desc: "Nasi + Soto + Es Teh.", img: "🍱" },
+                { id: 23, cat: 'Kopi Tiam', type: 'menu', title: "Paket Hemat B", price: "35k", desc: "Nasi + Soto + Es Teh.", img: "🍱" },
+                { id: 24, cat: 'Lunch Box', type: 'paket', title: "Paket Hemat B", price: "35k", desc: "Nasi + Soto + Es Teh.", img: "🍱" },
+            ];
+
+            const CATEGORY_ALL = "Semua";
+
+            function getCategoriesByType(type) {
+                return [...new Set(
+                    rawData
+                    .filter(i => i.type === type)
+                    .map(i => i.cat)
+                )];
+            }
+
+            function getItemsByType(type) {
+                return rawData.filter(i => i.type === type);
+            }
+
+            function getMenus() {
+                return rawData.filter(i => i.type === "menu");
+            }
+
+            function getPakets() {
+                return rawData.filter(i => i.type === "paket");
+            }
+
+            function renderCategoryDropdown(type) {
+                const select = document.getElementById("categorySelect");
+                const categories = getCategoriesByType(type);
+
+                select.innerHTML =
+                    `<option value="${CATEGORY_ALL}">Semua Kategori</option>` +
+                    categories.map(c => `<option value="${c}">${c}</option>`).join("");
+
+                select.value = CATEGORY_ALL;
+            }
+
+            function createCardHTML(item){
+
+                const img = item.img.startsWith("http")
+                ? `<img src="${item.img}" alt="${item.title}">`
+                : `<span>${item.img}</span>`;
+
+                return `
+				<div class="menu-card"
+					data-title="${item.title.toLowerCase()}"
+					data-desc="${item.desc.toLowerCase()}"
+					data-cat="${item.cat}"
+					onclick="openModal(${JSON.stringify(item).replace(/"/g,'&quot;')})">
+
+					<div class="menu-img">
+						${img}
+				</div>
+
+						<div class="menu-info">
+							<h3>${item.title}</h3>
+							<p>${item.desc}</p>
+							<span class="price">Rp ${item.price}</span>
+				</div>
+
+				</div>`;
+            }
+
+            function renderAll() {
+                const menuCont = document.getElementById('menuList');
+                const paketCont = document.getElementById('paketList');
+
+                menuCont.innerHTML = '';
+                paketCont.innerHTML = '';
+
+                renderMenus(menuCont);
+                renderPakets(paketCont);
+
+                filterItems();
+            }
+
+            function renderPakets(container) {
+                const pakets = getItemsByType("paket");
+                const categories = getCategoriesByType("paket");
+
+                categories.forEach(cat => {
+                    const items = pakets.filter(i => i.cat === cat);
+
+                    if (!items.length) return;
+                    container.innerHTML +=
+                        `<div class="category-header" data-cat="${cat}">${cat}</div>`
+
+                    items.forEach(i => {
+                        container.innerHTML += createCardHTML(i);
+                    });
+
+                });
+
+            }
+
+            function renderMenus(container) {
+                const menus = getItemsByType("menu");
+                const categories = getCategoriesByType("menu");
+
+                if (currentCategory === CATEGORY_ALL) {
+                    categories.forEach(cat => {
+                        const items = menus.filter(i => i.cat === cat);
+
+                        if (!items.length) return;
+
+                        container.innerHTML +=
+                            `<div class="category-header" data-cat="${cat}">${cat}</div>`;
+
+                        items.forEach(i => {
+                            container.innerHTML += createCardHTML(i);
+                        });
+                    });
+                } else {
+                    menus
+                        .filter(i => i.cat === currentCategory)
+                        .forEach(i => container.innerHTML += createCardHTML(i));
+                }
+            }
+
+            function setCategory(cat) {
+                currentCategory = cat;
+
+                document.getElementById('menuTitle').innerText =
+                    cat === CATEGORY_ALL ? 'Daftar Menu' : 'Menu ' + cat;
+
+                renderAll();
+            }
+
+            function filterItems() {
+                const query = document.getElementById('searchInput').value.toLowerCase();
+                let visibleCount = 0;
+
+                const container =
+                      currentPage === "menu"
+                ? document.getElementById("menuList")
+                : document.getElementById("paketList");
+
+                const cards = container.querySelectorAll(".menu-card");
+
+                cards.forEach(card => {
+                    const title = card.dataset.title;
+                    const desc = card.dataset.desc;
+                    const cat = card.dataset.cat;
+
+                    const matchSearch = title.includes(query) || desc.includes(query);
+                    const matchCat = (currentCategory === CATEGORY_ALL || cat === currentCategory);
+
+                    const visible = matchSearch && matchCat;
+
+                    card.style.display = visible ? "flex" : "none";
+
+                    if (visible) visibleCount++;
+                });
+
+                /* ===== Hide kategori kosong ===== */
+                const headers = container.querySelectorAll(".category-header");
+
+                headers.forEach(header => {
+                    const cat = header.dataset.cat || header.textContent.trim();
+                    const hasVisible = [...container.querySelectorAll(`.menu-card[data-cat="${cat}"]`)]
+                    .some(card => card.style.display !== "none");
+
+                    header.style.display = hasVisible ? "block" : "none";
+                });
+
+                /* ===== No results ===== */
+                const noResults = document.getElementById("noResults");
+                if(noResults){
+                    noResults.style.display = visibleCount ? "none" : "block";
+                }
+            }
+
+            function navigate(id, el) {
+                currentPage = id;
+
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById(id + '-page').classList.add('active');
+
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                el.classList.add('active');
+
+                document.getElementById('mainHeader').style.display =
+                    (id === 'menu' || id === 'paket') ? 'block' : 'none';
+
+                currentCategory = CATEGORY_ALL;
+                document.getElementById("searchInput").value = "";
+
+                renderCategoryDropdown(id);
+                filterItems();
+                lucide.createIcons();
+            }
+
+            function toggleTheme() {
+                const b = document.body;
+                const isDark = b.getAttribute('data-theme') === 'dark';
+                b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+                document.getElementById('themeIcon').setAttribute('data-lucide', isDark ? 'moon' : 'sun');
+                lucide.createIcons();
+            }
+
+            function openModal(item){
+                const modalImg = document.getElementById("modalImg")
+                const modalEmoji = document.getElementById("modalEmoji")
+
+                document.getElementById("modalTitle").innerText = item.title
+                document.getElementById("modalPrice").innerText = "Rp " + item.price
+
+                if(item.img.startsWith("http")){
+                    modalImg.src = item.img
+                    modalImg.style.display = "block"
+                    modalEmoji.style.display = "none"
+                }else{
+                    modalEmoji.innerText = item.img
+                    modalEmoji.style.display = "flex"
+                    modalImg.style.display = "none"
+                }
+
+                document.getElementById("itemModal").style.display = "flex"
+
+            }
+
+            function closeModal(){
+                document.getElementById("itemModal").style.display = "none"
+            }
+
+            renderCategoryDropdown("menu");
+            renderAll();
+            lucide.createIcons();
+        </script>
+    </body>
+</html>
