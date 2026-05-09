@@ -25,7 +25,7 @@
 
     <!-- Menu Section -->
     <div id="menuSection" class="max-w-2xl w-full hidden">
-        <h1 class="text-3xl font-black mb-8 text-amber-500 tracking-tight italic">DIREKTORI</h1>
+        <h1 class="text-3xl font-black mb-8 text-amber-500 tracking-tight">DIREKTORI</h1>
         <div id="linkContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Daftar link akan muncul di sini -->
         </div>
@@ -71,7 +71,7 @@
 
                 group.links.forEach(link => {
                     html += `
-                        <a href="${link.url}" class="block p-2.5 bg-zinc-950/50 hover:bg-zinc-800 hover:text-amber-500 rounded-xl font-semibold text-sm transition-all border border-zinc-800/50 text-zinc-300">
+                        <a href="${link.url}" target="_blank" class="block py-2.5 pr-2.5 pl-[15px] bg-zinc-950/50 hover:bg-zinc-800 hover:text-amber-500 rounded-xl font-semibold text-sm transition-all border border-zinc-800/50 text-zinc-300">
                             ${link.name}
                         </a>
                     `;
