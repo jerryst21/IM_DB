@@ -170,7 +170,7 @@
                 const response = await fetch('/api/arsip-master?type=eden', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ keyword: "bensin", cursor: null })
+                    body: JSON.stringify({ keyword: keyword, cursor: null })
                 });
                 const result = await response.json();
                 document.getElementById('loading').classList.add('hidden');
