@@ -6,24 +6,26 @@
     <title>INIJO Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-6">
+<body class="bg-zinc-950 text-white min-h-screen flex items-center justify-center p-6">
 
-    <div id="loginSection" class="max-w-sm w-full bg-slate-800 p-8 rounded-3xl shadow-2xl border border-slate-700">
-        <h1 class="text-2xl font-black mb-6 text-center">INIJO TOOLS</h1>
+    <!-- Login Section -->
+    <div id="loginSection" class="max-w-sm w-full bg-zinc-900 p-8 rounded-3xl shadow-2xl border border-zinc-800">
+        <h1 class="text-2xl font-black mb-6 text-center text-amber-500 tracking-tighter">INIJO TOOLS</h1>
         <input type="password" id="pinInput" placeholder="Masukkan PIN" 
-               class="w-full p-4 rounded-2xl bg-slate-900 border border-slate-600 text-center font-bold text-xl tracking-widest mb-4 focus:border-indigo-500 outline-none">
-        <button onclick="checkPin()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition-all">
+               class="w-full p-4 rounded-2xl bg-zinc-950 border border-zinc-700 text-center font-bold text-xl tracking-widest mb-4 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all">
+        <button onclick="checkPin()" class="w-full bg-amber-500 hover:bg-amber-600 text-zinc-950 font-black py-4 rounded-2xl transition-all uppercase tracking-widest">
             MASUK
         </button>
-        <p id="errMsg" class="text-red-400 text-sm mt-4 text-center hidden font-bold">PIN Salah, coba lagi.</p>
+        <p id="errMsg" class="text-red-500 text-xs mt-4 text-center hidden font-bold">PIN SALAH, SILAKAN COBA LAGI.</p>
     </div>
 
+    <!-- Menu Section -->
     <div id="menuSection" class="max-w-2xl w-full hidden">
-        <h1 class="text-3xl font-black mb-8 text-indigo-400">Direktori Alat</h1>
+        <h1 class="text-3xl font-black mb-8 text-amber-500 tracking-tight italic">DIREKTORI</h1>
         <div id="linkContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Daftar link akan muncul di sini -->
         </div>
@@ -35,7 +37,8 @@
             const btn = document.querySelector('button');
             const err = document.getElementById('errMsg');
 
-            btn.innerText = "Checking...";
+            btn.innerText = "CHECKING...";
+            err.classList.add('hidden');
             
             try {
                 const response = await fetch(`/api/base?pin=${pin}`);
@@ -61,14 +64,14 @@
 
             data.forEach(group => {
                 let html = `
-                    <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700">
-                        <h2 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">${group.category}</h2>
-                        <div class="space-y-3">
+                    <div class="bg-zinc-900 p-6 rounded-3xl border border-zinc-800 shadow-lg">
+                        <h2 class="text-sm font-black text-amber-500/80 uppercase tracking-[0.2em] mb-4 border-b border-zinc-800 pb-2">${group.category}</h2>
+                        <div class="space-y-2">
                 `;
 
                 group.links.forEach(link => {
                     html += `
-                        <a href="${link.url}" class="block p-3 bg-slate-900/50 hover:bg-indigo-600 rounded-xl font-bold transition-all border border-slate-700/50">
+                        <a href="${link.url}" class="block p-2.5 bg-zinc-950/50 hover:bg-zinc-800 hover:text-amber-500 rounded-xl font-semibold text-sm transition-all border border-zinc-800/50 text-zinc-300">
                             ${link.name}
                         </a>
                     `;
@@ -79,7 +82,6 @@
             });
         }
         
-        // Support enter key
         document.getElementById('pinInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') checkPin();
         });
