@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Jual Beli Properti</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .input-group-focus { outline: none; ring: 2px; ring-color: #3b82f6; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen py-10 px-4">
+
+    <div class="max-w-2xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
+        <div class="bg-slate-800 p-6 text-white text-center">
+            <h1 class="text-2xl font-bold uppercase tracking-wide">Kalkulator Jual Beli Properti</h1>
+            <p class="text-slate-400 text-sm mt-1">Estimasi Biaya & Transaksi Bersih Penjual - Pembeli</p>
+        </div>
+
+        <div class="p-8">
+            <!-- Nilai Transaksi -->
+            <div class="mb-6">
+                <label class="block text-gray-700 font-semibold mb-2 text-sm">Nilai Transaksi / Harga Objek (Rp)</label>
+                <div class="relative">
+                    <span class="absolute left-4 top-3 text-gray-400 font-medium">Rp</span>
+                    <input type="text" id="displayHarga" placeholder="Contoh: 500.000.000" 
+                        oninput="formatInput(this, false)"
+                        class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-semibold text-lg">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <!-- Komisi Agen -->
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2 text-xs uppercase tracking-wider">Komisi Agen (Penjual)</label>
+                    <div class="flex">
+                        <select id="typeKomisi" class="bg-gray-100 border border-gray-300 rounded-l-lg px-2 text-sm focus:outline-none">
+                            <option value="persen">%</option>
+                            <option value="rupiah">Rp</option>
+                        </select>
+                        <input type="text" id="valKomisi" oninput="formatInput(this, true)" placeholder="0"
+                            class="w-full border-y border-r border-gray-300 rounded-r-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                    </div>
+                </div>
+
+                <!-- Fee Notaris -->
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2 text-xs uppercase tracking-wider">Fee Notaris/PPAT (Pembeli)</label>
+                    <div class="flex">
+                        <select id="typeNotaris" class="bg-gray-100 border border-gray-300 rounded-l-lg px-2 text-sm focus:outline-none">
+                            <option value="persen">%</option>
+                            <option value="rupiah">Rp</option>
+                        </select>
+                        <input type="text" id="valNotaris" oninput="formatInput(this, true)" placeholder="0"
+                            class="w-full border-y border-r border-gray-300 rounded-r-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="hitungTransaksi()" 
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition-colors shadow-lg shadow-blue-200 text-lg">
+                Hitung Rincian Transaksi
+            </button>
+
+            <!-- HASIL PERHITUNGAN -->
+            <div id="resultArea" class="hidden mt-8 border-t pt-6 space-y-6">
+                
+                <!-- Ringkasan Penjual -->
+                <div class="p-5 bg-red-50 rounded-2xl border border-red-100">
+                    <h3 class="text-red-800 font-bold mb-3 flex items-center uppercase text-sm tracking-widest">
+                        <span class="mr-2">🏠</span> Sisi Penjual
+                    </h3>
+                    <div class="space-y-2 text-sm mb-4">
+                        <div class="flex justify-between text-gray-600 font-medium pb-2 border-b border-red-100">
+                            <span>Nilai Transaksi (Harga Jual)</span>
+                            <span id="resHargaPenjual">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-gray-500 pt-1">
+                            <span>Pajak Penghasilan (PPh Final 2,5%)</span>
+                            <span id="resPph" class="font-semibold text-red-600">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-gray-500">
+                            <span>Komisi Agen <span id="labelPersenKomisi" class="text-[10px] bg-red-100 px-1 rounded ml-1 hidden"></span></span>
+                            <span id="resKomisi" class="font-semibold text-red-600">Rp 0</span>
+                        </div>
+                    </div>
+                    <div class="pt-3 border-t border-red-200">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-red-900">Estimasi Dana Bersih Diterima</span>
+                            <span id="resNetto" class="text-xl font-black text-red-700">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ringkasan Pembeli -->
+                <div class="p-5 bg-emerald-50 rounded-2xl border border-emerald-100">
+                    <h3 class="text-emerald-800 font-bold mb-3 flex items-center uppercase text-sm tracking-widest">
+                        <span class="mr-2">🔑</span> Sisi Pembeli
+                    </h3>
+                    <div class="space-y-2 text-sm mb-4">
+                        <div class="flex justify-between text-gray-600 font-medium pb-2 border-b border-emerald-100">
+                            <span>Nilai Transaksi (Harga Beli)</span>
+                            <span id="resHargaPembeli">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-gray-500 pt-1">
+                            <span>Pajak Pembeli (BPHTB)</span>
+                            <span id="resBphtb" class="font-semibold text-emerald-600">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-gray-500">
+                            <span>Jasa Notaris/PPAT <span id="labelPersenNotaris" class="text-[10px] bg-emerald-100 px-1 rounded ml-1 hidden"></span></span>
+                            <span id="resFeeNotaris" class="font-semibold text-emerald-600">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-gray-400 italic">
+                            <span>*Estimasi tambahan BBN & PNBP: Rp 1-3jt</span>
+                        </div>
+                    </div>
+                    <div class="pt-3 border-t border-emerald-200">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-emerald-900">Total Biaya Yang Dikeluarkan</span>
+                            <span id="resTotalPembeli" class="text-xl font-black text-emerald-700">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 p-4 bg-gray-100 rounded-lg border border-gray-200 text-[11px] text-gray-600 space-y-1">
+                    <p class="font-bold text-gray-700 uppercase">Informasi Pajak BPHTB (Pembeli):</p>
+                    <p>• Tarif: 5% x (Harga Transaksi - NPOPTK)</p>
+                    <p>• NPOPTK Kota Manado: Rp 80.000.000</p>
+                    <p class="pt-2 italic text-gray-400 leading-relaxed text-center">
+                        *Hasil perhitungan ini merupakan estimasi sesuai ketentuan wilayah Manado.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function formatInput(input, allowDecimal) {
+            let value = input.value;
+            
+            if (allowDecimal) {
+                // Izinkan angka dan satu titik desimal
+                value = value.replace(/[^0-9.]/g, "");
+                const parts = value.split('.');
+                if (parts.length > 2) value = parts[0] + '.' + parts.slice(1).join('');
+                input.value = value;
+            } else {
+                // Format ribuan untuk input Rupiah
+                value = value.replace(/\D/g, "");
+                if (value !== "") {
+                    input.value = new Intl.NumberFormat('id-ID').format(value);
+                } else {
+                    input.value = "";
+                }
+            }
+        }
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(angka);
+        }
+
+        function cleanNumber(str) {
+            if (!str) return 0;
+            // Jika input mengandung titik tapi bukan format ribuan (untuk desimal persen)
+            // Kita asumsikan input dengan titik adalah desimal jika tidak diformat otomatis ribuan
+            return parseFloat(str.replace(/\./g, (match, offset, all) => {
+                // Jika ini adalah input harga (ribuan), hapus titiknya. 
+                // Jika input desimal (valKomisi/valNotaris), biarkan jika hanya ada satu titik.
+                return all.split('.').length > 2 || all.length > 6 ? "" : ".";
+            })) || parseFloat(str) || 0;
+        }
+
+        // Fungsi pembersih khusus untuk input desimal agar tidak bentrok dengan ribuan
+        function parseDecimal(str) {
+            return parseFloat(str) || 0;
+        }
+
+        function hitungTransaksi() {
+            const harga = cleanNumber(document.getElementById('displayHarga').value.replace(/\./g, ""));
+            
+            if (harga <= 0) {
+                alert("Masukkan nilai transaksi.");
+                return;
+            }
+
+            // Hitung Komisi Agen & Label
+            let komisi = 0;
+            const valKStr = document.getElementById('valKomisi').value;
+            const typeK = document.getElementById('typeKomisi').value;
+            const labelK = document.getElementById('labelPersenKomisi');
+            
+            if (typeK === 'persen') {
+                const valK = parseDecimal(valKStr);
+                komisi = harga * (valK / 100);
+                labelK.innerText = valK + '%';
+                labelK.classList.remove('hidden');
+            } else {
+                const valK = cleanNumber(valKStr.replace(/\./g, ""));
+                komisi = valK;
+                labelK.classList.add('hidden');
+            }
+
+            // Hitung Fee Notaris & Label
+            let feeNotaris = 0;
+            const valNStr = document.getElementById('valNotaris').value;
+            const typeN = document.getElementById('typeNotaris').value;
+            const labelN = document.getElementById('labelPersenNotaris');
+
+            if (typeN === 'persen') {
+                const valN = parseDecimal(valNStr);
+                feeNotaris = harga * (valN / 100);
+                labelN.innerText = valN + '%';
+                labelN.classList.remove('hidden');
+            } else {
+                const valN = cleanNumber(valNStr.replace(/\./g, ""));
+                feeNotaris = valN;
+                labelN.classList.add('hidden');
+            }
+
+            // Pajak-Pajak
+            const pph = harga * 0.025;
+            const npoptkManado = 80000000;
+            let bphtb = (harga - npoptkManado) * 0.05;
+            if (bphtb < 0) bphtb = 0;
+
+            // Perhitungan Akhir
+            const danaBersihPenjual = harga - pph - komisi;
+            const totalBayarPembeli = harga + bphtb + feeNotaris;
+
+            // Update UI Penjual
+            document.getElementById('resHargaPenjual').innerText = formatRupiah(harga);
+            document.getElementById('resPph').innerText = "- " + formatRupiah(pph);
+            document.getElementById('resKomisi').innerText = "- " + formatRupiah(komisi);
+            document.getElementById('resNetto').innerText = formatRupiah(danaBersihPenjual);
+
+            // Update UI Pembeli
+            document.getElementById('resHargaPembeli').innerText = formatRupiah(harga);
+            document.getElementById('resBphtb').innerText = "+ " + formatRupiah(bphtb);
+            document.getElementById('resFeeNotaris').innerText = "+ " + formatRupiah(feeNotaris);
+            document.getElementById('resTotalPembeli').innerText = formatRupiah(totalBayarPembeli);
+
+            document.getElementById('resultArea').classList.remove('hidden');
+            
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
