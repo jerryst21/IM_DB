@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Arsip XO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .form-input { 
+            width: 100%; background-color: #f1f5f9; border: 1px solid #e2e8f0; 
+            border-radius: 1rem; padding: 0.8rem 1rem; font-weight: 600; font-size: 0.9rem;
+            outline: none; transition: all 0.2s;
+        }
+        .form-input:focus { border-color: #f59e0b; background-color: white; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); }
+        label { font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; display: block; margin-left: 0.5rem; }
+        
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+        #rincian_nota { overflow: hidden; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 text-zinc-900">
+    <div class="max-w-md mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-slate-600 transition-all shadow-sm">
+                <i data-lucide="chevron-left"></i>
+            </button>
+            <h1 class="text-xl font-black text-slate-900 tracking-tight">Edit Arsip XO</h1>
+            <div class="w-10"></div> 
+        </div>
+
+        <div id="loading" class="py-20 text-center">
+            <div class="animate-spin inline-block w-8 h-8 border-[3px] border-amber-500 border-t-transparent rounded-full"></div>
+            <p class="text-xs font-bold text-slate-400 mt-4 uppercase tracking-widest">Mengambil Data...</p>
+        </div>
+
+        <form id="editForm" class="hidden space-y-5 bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm">
+            <input type="hidden" id="pageId">
+
+            <div>
+                <label>Tanggal</label>
+                <input type="date" id="tanggal" class="form-input" required>
+            </div>
+
+            <div>
+                <label>Keterangan Utama</label>
+                <input type="text" id="keterangan" placeholder="Nama pengeluaran/pemasukan" class="form-input" required>
+            </div>
+
+            <div>
+                <label>Jumlah (Nominal)</label>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-400 text-sm">Rp</span>
+                    <input type="text" id="jumlah_display" class="form-input pl-11" placeholder="0" required>
+                    <input type="hidden" id="jumlah">
+                </div>
+            </div>
+
+            <div>
+                <label>Rincian Nota / Catatan</label>
+                <textarea id="rincian_nota" rows="1" class="form-input resize-none" placeholder="Detail barang atau jasa..."></textarea>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100">
+                <label>PIN Konfirmasi (Untuk Simpan/Hapus)</label>
+                <input type="password" id="pin" placeholder="Masukkan PIN" class="form-input text-center tracking-[0.5em]" required>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="confirmDelete()" id="btnDelete" class="w-1/4 py-4 bg-red-50 text-red-500 rounded-2xl hover:bg-red-100 transition-all flex items-center justify-center border border-red-100">
+                    <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </button>
+                
+                <button type="submit" id="btnSubmit" class="flex-grow py-4 bg-zinc-900 text-white font-black rounded-2xl hover:bg-zinc-800 transition-all shadow-lg border-b-4 border-amber-500 flex items-center justify-center gap-2">
+                    <i data-lucide="save" class="w-5 h-5"></i> SIMPAN
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // --- KONFIGURASI HALAMAN ---
+        const ARSIP_TYPE = 'xo'; 
+        const REDIRECT_URL = 'arsipxotest.html'; 
+        const API_MASTER = '/api/arsip-master';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageId = urlParams.get('id');
+
+        const tx = document.getElementById('rincian_nota');
+        const inputDisplay = document.getElementById('jumlah_display');
+        const inputHidden = document.getElementById('jumlah');
+
+        // Auto-resize Textarea
+        tx.addEventListener("input", function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + "px";
+        }, false);
+
+        // Format Currency
+        inputDisplay.addEventListener('input', function(e) {
+            let value = this.value.replace(/[^0-9]/g, '');
+            inputHidden.value = value;
+            this.value = value ? parseInt(value).toLocaleString('id-ID') : '';
+        });
+
+        async function loadData() {
+            if (!pageId) {
+                alert("ID tidak ditemukan");
+                return history.back();
+            }
+
+            try {
+                // Menambahkan query ?type agar master API tahu database mana yang dipanggil
+                const res = await fetch(`${API_MASTER}?type=${ARSIP_TYPE}&id=${pageId}`);
+                const result = await res.json();
+
+                if (res.ok) {
+                    const d = result.data;
+                    document.getElementById('pageId').value = d.id;
+                    document.getElementById('tanggal').value = d.tanggal;
+                    document.getElementById('keterangan').value = d.keterangan;
+                    inputHidden.value = d.jumlah;
+                    inputDisplay.value = parseInt(d.jumlah).toLocaleString('id-ID');
+                    document.getElementById('rincian_nota').value = d.rincian_nota;
+
+                    document.getElementById('loading').classList.add('hidden');
+                    document.getElementById('editForm').classList.remove('hidden');
+
+                    // Resize textarea setelah data masuk
+                    setTimeout(() => {
+                        tx.style.height = 'auto';
+                        tx.style.height = (tx.scrollHeight) + "px";
+                    }, 100);
+
+                } else {
+                    throw new Error(result.error || "Gagal mengambil data");
+                }
+            } catch (err) {
+                alert(err.message);
+                history.back();
+            }
+        }
+
+        document.getElementById('editForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            const originalText = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.innerHTML = "Menyimpan...";
+
+            const payload = {
+                id: document.getElementById('pageId').value,
+                tanggal: document.getElementById('tanggal').value,
+                keterangan: document.getElementById('keterangan').value,
+                jumlah: document.getElementById('jumlah').value,
+                rincian_nota: document.getElementById('rincian_nota').value,
+                pin: document.getElementById('pin').value
+            };
+
+            try {
+                // Mengirim PUT ke API master dengan query type
+                const res = await fetch(`${API_MASTER}?type=${ARSIP_TYPE}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+
+                if (res.ok) {
+                    alert("Berhasil diperbarui!");
+                    window.location.href = REDIRECT_URL;
+                } else {
+                    alert(result.message || "Gagal update (Cek PIN)");
+                }
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        };
+
+        async function confirmDelete() {
+            const pin = document.getElementById('pin').value;
+            if (!pin) {
+                alert("Masukkan PIN konfirmasi terlebih dahulu.");
+                document.getElementById('pin').focus();
+                return;
+            }
+
+            if (confirm("Yakin ingin menghapus arsip ini?")) {
+                const btnDel = document.getElementById('btnDelete');
+                btnDel.disabled = true;
+
+                try {
+                    const res = await fetch(`${API_MASTER}?type=${ARSIP_TYPE}`, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: pageId, pin: pin })
+                    });
+                    const result = await res.json();
+
+                    if (res.ok) {
+                        alert("Data dihapus!");
+                        window.location.href = REDIRECT_URL;
+                    } else {
+                        alert(result.message || "Gagal hapus (Cek PIN)");
+                    }
+                } catch (err) {
+                    alert("Error: " + err.message);
+                } finally {
+                    btnDel.disabled = false;
+                }
+            }
+        }
+
+        window.onload = () => {
+            loadData();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
