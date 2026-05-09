@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Informasi Pajak & Biaya Sewa Menyewa Indonesia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    :root {
+      --primary: #219d8c;
+      --secondary: #0a5d73;
+      --accent: #f3faf9;
+      --bg: #f7f7fb;
+      --white: #fff;
+      --shadow: 0 8px 24px rgba(33, 157, 140, .07);
+      --rounded: 16px;
+      --gray: #bfc1c6;
+      --danger: #c2036d;
+      --warning: #faa63a;
+      --success: #198754;
+    }
+
+    body {font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg);}
+    .container {
+      max-width: 800px;
+      padding: 32px 8vw;
+      margin: 40px auto;
+      background: var(--white);
+      border-radius: var(--rounded);
+      box-shadow: var(--shadow);
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 36px;
+    }
+    header .logo {
+      font-size: 2.5rem;
+      color: var(--primary);
+    }
+    header .title {
+      font-weight: 700;
+      font-size: 1.7rem;
+      color: var(--secondary);
+      letter-spacing: 1px;
+    }
+    nav {
+      display: flex;
+      border-radius: var(--rounded);
+      overflow: hidden;
+      background: var(--accent);
+      margin-bottom: 24px;
+      box-shadow: 0 2px 6px rgba(33,157,140,.03);
+    }
+    nav button {
+      flex: 1;
+      outline: none;
+      border: none;
+      background: var(--accent);
+      color: var(--primary);
+      font-size: 1.07rem;
+      padding: 16px 0;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      font-weight: 600;
+      border-bottom: 2px solid transparent;
+    }
+    nav button.active {
+      background: var(--primary);
+      color: var(--white);
+      border-bottom: 3px solid var(--success);
+    }
+
+    section {
+      display: none;
+      animation: fade .6s;
+    }
+    section.active {display: block;}
+    @keyframes fade {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    .info-card {
+      background: var(--accent);
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 22px;
+      box-shadow: 0 1px 8px rgba(33,157,140,.06);
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .info-card .icon {
+      font-size: 2.1rem;
+      color: var(--primary);
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+    .info-card ul {margin-left: 18px;}
+    .example-box {
+      background: var(--white);
+      border-left: 5px solid var(--success);
+      border-radius: 8px;
+      margin: 16px 0;
+      padding: 16px 16px 16px 22px;
+      font-size: 1.05em;
+      box-shadow: 0 1px 4px rgba(33,157,140,.04);
+    }
+    .item-list li {
+      padding: 4px 0;
+      font-size: 1.05em;
+    }
+    .summary {
+      display: flex; flex-direction: column; gap: 8px;
+      padding: 18px 16px;
+      background: var(--primary);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 1.13em;
+      border-radius: 10px;
+      margin: 16px 0 20px 0;
+      letter-spacing: .2px;
+    }
+
+    .note {
+      color: var(--gray);
+      background: var(--accent);
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      padding: 14px 20px;
+      font-size: .98em;
+      margin-top: 20px;
+    }
+
+    @media (max-width:600px) {
+      .container {padding: 18px 2vw;}
+      header .title {font-size: 1.15rem;}
+      nav button {font-size: .97rem; padding: 10px 0;}
+      .info-card {padding: 16px; gap: 10px;}
+      .summary {padding: 12px;}
+      .note {padding: 10px;}
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      const btns = document.querySelectorAll('nav button');
+      const tabs = document.querySelectorAll('section');
+      btns.forEach((btn, idx) => {
+        btn.addEventListener('click', () => {
+          btns.forEach(b=>b.classList.remove('active'));
+          tabs.forEach(t=>t.classList.remove('active'));
+          btn.classList.add('active');
+          tabs[idx].classList.add('active');
+        });
+      });
+      // default: first tab active
+      btns[0].classList.add('active');
+      tabs[0].classList.add('active');
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo"><i class="fa-solid fa-building-user"></i></div>
+      <div class="title">Informasi Pajak & Biaya Sewa Menyewa Properti (Indonesia)</div>
+    </header>
+
+    <nav>
+      <button type="button"><i class="fa-solid fa-landmark"></i> Pajak Sewa</button>
+      <button type="button"><i class="fa-solid fa-money-bill-wave"></i> Biaya Lain</button>
+      <button type="button"><i class="fa-solid fa-calculator"></i> Contoh Perhitungan</button>
+      <button type="button"><i class="fa-regular fa-circle-question"></i> Tips & Catatan</button>
+    </nav>
+
+    <section>
+      <!-- Pajak Sewa -->
+      <div class="info-card">
+        <div class="icon"><i class="fa-regular fa-file-lines"></i></div>
+        <div>
+          <h3>PPh Pasal 4 ayat (2) <span style="color:var(--success);">(Sewa Tanah & Bangunan)</span></h3>
+          <ul class="item-list">
+            <li>Pemilik properti wajib membayar <b>PPh 4(2) sebesar 10%</b> dari bruto sewa.</li>
+            <li>Jika penyewa adalah badan usaha, pajak dipotong oleh penyewa.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="icon"><i class="fa-solid fa-receipt"></i></div>
+        <div>
+          <h3>PPN Sewa Menyewa</h3>
+          <ul class="item-list">
+            <li>Jika pemilik adalah <b>Pengusaha Kena Pajak (PKP)</b>, sewa dikenakan <b>PPN 10%</b>.</li>
+            <li>Sewa rumah untuk hunian pribadi biasanya <b>tidak dikenakan PPN</b>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <!-- Biaya Lain -->
+      <div class="info-card">
+        <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div>
+          <h3>Deposit / Jaminan</h3>
+          <ul class="item-list">
+            <li>Umumnya <b>1 bulan sewa</b>, sebagai jaminan kerusakan/keterlambatan.</li>
+            <li>Dikembalikan di akhir masa sewa jika tidak ada kerusakan/masalah.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="icon"><i class="fa-solid fa-people-arrows"></i></div>
+        <div>
+          <h3>Biaya Broker / Perantara</h3>
+          <ul class="item-list">
+            <li>Jika menggunakan agen, biasanya <b>5-10% dari nilai sewa tahunan</b>.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="icon"><i class="fa-solid fa-house-chimney-user"></i></div>
+        <div>
+          <h3>Biaya Listrik, Air, Internet</h3>
+          <ul class="item-list">
+            <li>Ditanggung penyewa (tidak termasuk sewa).</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="icon"><i class="fa-solid fa-heart-circle-bolt"></i></div>
+        <div>
+          <h3>Biaya Pemeliharaan & Asuransi</h3>
+          <ul class="item-list">
+            <li>Bisa tanggung jawab pemilik atau penyewa, sesuai perjanjian.</li>
+            <li>Asuransi kadang diwajibkan untuk properti tertentu.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <!-- Contoh Perhitungan -->
+      <div class="example-box">
+        <strong>Contoh: Sewa Gedung 1 Tahun</strong><br>
+        <table style="margin-top:10px;">
+          <tr><td>Biaya Sewa</td><td>: Rp 120.000.000</td></tr>
+          <tr><td>PPh 4(2) 10%</td><td>: Rp 12.000.000</td></tr>
+          <tr><td>PPN 10%</td><td>: Rp 12.000.000</td></tr>
+          <tr><td>Broker 5%</td><td>: Rp 6.000.000</td></tr>
+          <tr><td>Deposit (1 bulan)</td><td>: Rp 10.000.000</td></tr>
+        </table>
+      </div>
+      <div class="summary">
+        Total Biaya Awal: <b>Rp 148.000.000</b><br>
+        <small style="font-weight:400;">(Belum termasuk <b>PPh 4(2)</b> yg dipotong penyewa & biaya listrik/air/internet)</small>
+      </div>
+      <div class="example-box" style="background:#FAE7E3;border-left:5px solid var(--warning);color:#6b3321;">
+        <i class="fa-solid fa-lightbulb" style="color:var(--warning);margin-right:8px;"></i>
+        <span><strong>Catatan:</strong> Jika penyewa adalah perorangan, PPh 4(2) kadang ditanggung pemilik.</span>
+      </div>
+    </section>
+
+    <section>
+      <!-- Tips dan Catatan -->
+      <div class="note">
+        <ul>
+          <li><i class="fa-solid fa-check-circle" style="color:var(--success);margin-right:4px;"></i>
+            Pastikan <b>perjanjian sewa</b> memuat jelas rincian pajak & biaya, hak/kewajiban, serta tanggung jawab perawatan.</li>
+          <li><i class="fa-solid fa-check-circle" style="color:var(--success);margin-right:4px;"></i>
+            Konfirmasi status PKP pemilik untuk mengetahui apakah PPN akan dikenakan.</li>
+          <li><i class="fa-solid fa-shield-halved" style="color:var(--primary);margin-right:5px;"></i>
+            Uang deposit dikembalikan bila tidak ada kerusakan/kekurangan setelah masa sewa.</li>
+          <li><i class="fa-solid fa-circle-info" style="color:var(--primary);margin-right:5px;"></i>
+            Simpan bukti pembayaran pajak, deposit, dan biaya lain untuk keperluan administrasi.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer style="margin-top:36px;text-align:center;color:var(--gray);font-size:.94em;">
+      <i class="fa-solid fa-building-user" style="color:var(--primary);"></i>
+      <span style="font-weight:500;">Informasi Pajak & Biaya Sewa Properti Indonesia</span>
+      <br>&copy; 2024
+    </footer>
+  </div>
+</body>
+</html>
