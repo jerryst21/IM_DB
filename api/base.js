@@ -29,9 +29,9 @@ export default function handler(req, res) {
             links: [
                 { name: "Editor & Viewer", url: "https://htmleditor.gitlab.io/" },
                 { name: "Compare Text", url: "https://www.textcompare.org/" },
-                { name: "Code Pen-Format Code", url: "https://htmleditor.gitlab.io/" },
+                { name: "Code Pen-Format Code", url: "https://codepen.io/pen/?editors=1000" },
                 { name: "Toolpix-Format Code", url: "https://toolpix.pythonanywhere.com/free-online-ai-html-editor" },
-                { name: "Editor & Viewer", url: "https://htmleditor.gitlab.io/" }
+                { name: "HTML Playground", url: "https://playcode.io/html-template" }
             ]
         },
         {
