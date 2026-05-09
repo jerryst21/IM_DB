@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arsip SPBU Ring Road</title>
+    <title>Arsip Ring Road</title>
     <link rel="icon" type="image/png" href="../../uploads/2026-04-25-jurnal-icon.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -58,11 +58,11 @@
             <div>
                 <div class="flex items-center gap-2">
                     <i data-lucide="archive" class="w-6 h-6 text-zinc-900"></i>
-                    <h1 class="text-2xl font-black text-slate-900 tracking-tight">Arsip SPBU Ring Road</h1>
+                    <h1 class="text-2xl font-black text-slate-900 tracking-tight">Arsip Ring Road</h1>
                 </div>
                 <p id="recordCounter" class="text-[10px] text-amber-600 font-bold uppercase tracking-[0.2em] mt-1">Database Pengarsipan Digital</p>
             </div>
-            <a href="https://forms.fillout.com/t/fjkDzhQHLdus" target="_blank" class="p-3 bg-zinc-900 text-white rounded-2xl hover:bg-zinc-800 transition-all shadow-lg border-b-4 border-amber-500">
+            <a href="https://forms.fillout.com/t/ebdW6hjik2us" target="_blank" class="p-3 bg-zinc-900 text-white rounded-2xl hover:bg-zinc-800 transition-all shadow-lg border-b-4 border-amber-500">
                 <i data-lucide="plus" class="w-5 h-5"></i>
             </a>
         </div>
@@ -167,10 +167,10 @@
         async function executeFetch(cursor = null) {
             const keyword = document.getElementById('filterKeyword').value;
             try {
-                const response = await fetch('/api/arsiprr', {
+                const response = await fetch('/api/arsip-master?type=rr', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ keyword, cursor })
+                    body: JSON.stringify({ keyword: "bensin", cursor: null })
                 });
                 const result = await response.json();
                 document.getElementById('loading').classList.add('hidden');
