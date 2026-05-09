@@ -18,21 +18,27 @@ export default function handler(req, res) {
             ]
         },
         {
-            category: "BOUNDLESS",
+            category: "PROPERTI",
             links: [
-                { name: "Known Colours", url: "boundless/known-colours.html" }
+                { name: "Kalkulator Jual Beli", url: "properti/kalk-jual-beli.html" },
+                { name: "Info Pajak Sewa Menyewa", url: "properti/pajak-sewa.html" }
             ]
         },
         {
-            category: "REMINDER",
+            category: "CODING",
             links: [
-                { name: "Keluarga", url: "reminder/keluarga.html" }
+                { name: "Editor & Viewer", url: "https://htmleditor.gitlab.io/" },
+                { name: "Compare Text", url: "https://www.textcompare.org/" },
+                { name: "Code Pen-Format Code", url: "https://htmleditor.gitlab.io/" },
+                { name: "Toolpix-Format Code", url: "https://toolpix.pythonanywhere.com/free-online-ai-html-editor" },
+                { name: "Editor & Viewer", url: "https://htmleditor.gitlab.io/" }
             ]
         },
         {
             category: "TEST",
             links: [
                 { name: "Menu XO", url: "test/menuxo.html" },
+                { name: "Reminder Keluarga", url: "test/reminder.html" },
                 { name: "Scanner", url: "test/scanner.html" }
             ]
         }
