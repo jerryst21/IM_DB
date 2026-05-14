@@ -3,35 +3,35 @@
     {
       "category": "ARSIP",
       "links": [
-        { "title": "Nota Eden", "url": "arsip/arsipeden12.html", "icon": "fa-solid fa-building-columns" },
-        { "title": "Nota SPBU Politeknik", "url": "arsip/arsippoli77.html", "icon": "fa-solid fa-building-columns" },
-        { "title": "Nota SPBU Ring Road", "url": "arsip/arsiprr78.html" },
-        { "title": "Nota XO", "url": "arsip/arsipxo862.html" }
+        { "title": "Nota Eden", "url": "arsip/arsipeden12.html", "icon": "fa-solid fa-box-archive" },
+        { "title": "Nota SPBU Politeknik", "url": "arsip/arsippoli77.html", "icon": "fa-solid fa-box-archive" },
+        { "title": "Nota SPBU Ring Road", "url": "arsip/arsiprr78.html", "icon": "fa-solid fa-box-archive" },
+        { "title": "Nota XO", "url": "arsip/arsipxo862.html", "icon": "fa-solid fa-box-archive" }
       ]
     },
     {
       "category": "PROPERTI",
       "links": [
-        { "title": "Kalkulator Jual Beli", "url": "properti/kalk-jual-beli.html" },
-        { "title": "Info Pajak Sewa Menyewa", "url": "properti/pajak-sewa.html" }
+        { "title": "Kalkulator Jual Beli", "url": "properti/kalk-jual-beli.html", "icon": "fa-solid fa-calculator" },
+        { "title": "Info Pajak Sewa Menyewa", "url": "properti/pajak-sewa.html", "icon": "fa-solid fa-file-invoice-dollar" }
       ]
     },
     {
       "category": "CODING",
       "links": [
-        { "title": "Editor & Viewer ", "url": "https://htmleditor.gitlab.io/" },
-        { "title": "Compare Text", "url": "https://www.textcompare.org/" },
-        { "title": "Code Pen-Format Code", "url": "https://codepen.io/pen/?editors=1000" },
-        { "title": "Toolpix-Format Code", "url": "https://toolpix.pythonanywhere.com/free-online-ai-html-editor" },
-        { "title": "HTML Playground", "url": "https://playcode.io/html-template" }
+        { "title": "Editor & Viewer ", "url": "https://htmleditor.gitlab.io/", "icon": "fa-solid fa-pen-to-square" },
+        { "title": "Compare Text", "url": "https://www.textcompare.org/", "icon": "fa-solid fa-code-compare" },
+        { "title": "Code Pen-Format Code", "url": "https://codepen.io/pen/?editors=1000", "icon": "fa-solid fa-wand-magic-sparkles" },
+        { "title": "Toolpix-Format Code", "url": "https://toolpix.pythonanywhere.com/free-online-ai-html-editor", "icon": "fa-solid fa-wand-magic-sparkles" },
+        { "title": "HTML Playground", "url": "https://playcode.io/html-template", "icon": "fa-solid fa-wand-magic-sparkles" }
       ]
     },
     {
       "category": "TEST",
       "links": [
-        { "title": "Menu XO", "url": "test/menuxo.html" },
-        { "title": "Reminder Keluarga", "url": "test/reminder.html" },
-        { "title": "Scanner", "url": "test/scanner.html" }
+        { "title": "Menu XO", "url": "test/menuxo.html", "icon": "fa-solid fa-bars" },
+        { "title": "Reminder Keluarga", "url": "test/reminder.html", "icon": "fa-solid fa-bell" },
+        { "title": "Scanner", "url": "test/scanner.html", "icon": "fa-solid fa-qrcode" }
       ]
     }
   ],
