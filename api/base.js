@@ -1,7 +1,9 @@
 import dataLinks from './datalinks.json';
 
 export default function handler(req, res) {
-    const { pin } = req.query;
+    const data = req.method === 'POST' ? req.body : req.query;
+    const { pin, type, id, userPin, rowId } = data;
+    
     const correctPin = process.env.PIN_INIJOTOOL;
 
     if (pin !== correctPin) return res.status(401).json({ error: "PIN Salah" });
