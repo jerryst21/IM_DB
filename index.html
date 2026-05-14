@@ -3,45 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INIJO Tools</title>
+    <title>INIJO TOOLS</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/all/all.min.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono&display=swap" rel="stylesheet">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        :root {
+            --bg-main: #000000;
+            --card-surface: #121214;
+            --accent-yellow: #FACC15;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-main); 
+            color: #FFFFFF;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Gaya Login */
+        .login-card {
+            background-color: var(--card-surface);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Gaya Halaman Kerja */
+        .work-card {
+            background-color: var(--card-surface);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease-out;
+            padding: 0.5rem 1rem !important;
+        }
+
+        .work-card:active {
+            transform: scale(0.98);
+            background-color: #1a1a1c;
+        }
+
+        /* Hover Title Color */
+        .title-link:hover h3 {
+            color: var(--accent-yellow) !important;
+        }
+
+        /* Info Style */
+        .info-text {
+            font-family: 'Roboto Mono', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .pill-link {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #d1d1d6;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem !important;
+            transition: 0.2s;
+        }
+
+        .pill-link:hover {
+            background: var(--accent-yellow);
+            color: #000000;
+            border-color: var(--accent-yellow);
+        }
+
+        .num-badge {
+            font-weight: 800;
+            color: #71717a;
+            font-size: 14px;
+            letter-spacing: -0.05em;
+        }
+
+        .category-header {
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: #FFFFFF;
+            font-size: 12px;
+        }
     </style>
 </head>
-<body class="bg-zinc-950 text-white min-h-screen flex items-center justify-center p-6">
+<body class="p-4 md:p-8 pb-16 min-h-screen flex items-center justify-center">
 
-    <!-- Login Section -->
-    <div id="loginSection" class="max-w-sm w-full bg-zinc-900 p-8 rounded-3xl shadow-2xl border border-zinc-800">
-        <h1 class="text-2xl font-black mb-6 text-center text-amber-500 tracking-tighter">INIJO TOOLS</h1>
-        <input type="password" id="pinInput" placeholder="Masukkan PIN" 
-               class="w-full p-4 rounded-2xl bg-zinc-950 border border-zinc-700 text-center font-bold text-xl tracking-widest mb-4 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all">
-        <button onclick="checkPin()" class="w-full bg-amber-500 hover:bg-amber-600 text-zinc-950 font-black py-4 rounded-2xl transition-all uppercase tracking-widest">
+    <!-- SEKSI LOGIN (Muncul Pertama Kali) -->
+    <div id="loginSection" class="max-w-sm w-full login-card p-8 rounded-[32px] shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-black text-yellow-400 tracking-tighter">INIJO TOOLS</h1>
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Sistem Direktori</p>
+        </div>
+        
+        <input type="password" id="pinInput" placeholder="PIN" autofocus 
+            inputmode="numeric" pattern="[0-9]*" 
+            class="w-full p-4 rounded-2xl bg-black border border-white/10 text-center font-bold text-xl tracking-[0.5em] mb-4 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none transition-all text-yellow-400">
+        
+        <button onclick="checkPin()" id="btnMasuk" class="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-black py-4 rounded-2xl transition-all uppercase tracking-widest text-sm">
             MASUK
         </button>
-        <p id="errMsg" class="text-red-500 text-xs mt-4 text-center hidden font-bold">PIN SALAH, SILAKAN COBA LAGI.</p>
+        
+        <p id="errMsg" class="text-red-500 text-[10px] mt-4 text-center hidden font-bold uppercase tracking-tight">
+            <i class="fa-solid fa-circle-exclamation mr-1"></i> PIN salah, akses ditolak.
+        </p>
     </div>
 
-    <!-- Menu Section -->
-    <div id="menuSection" class="max-w-2xl w-full hidden">
-        <h1 class="text-3xl font-black mb-8 text-amber-500 tracking-tight">DIREKTORI</h1>
-        <div id="linkContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Daftar link akan muncul di sini -->
+    <!-- SEKSI MENU (Hidden Awalnya) -->
+    <div id="menuSection" class="max-w-md w-full hidden"> 
+        <header class="mb-8">
+            <h1 class="text-xl font-extrabold tracking-tight">Direktori</h1>
+            <p class="text-yellow-400 font-bold text-[10px] tracking-widest opacity-80">Akses Cepat Layanan INIJO</p>
+        </header>
+
+        <div id="linkContainer" class="space-y-8">
+            <!-- Konten JSON akan dirender di sini -->
         </div>
+
+        <footer class="mt-12 pt-6 border-t border-white/10 text-center">
+            <p class="text-[10px] font-bold text-gray-600 tracking-widest uppercase">© 2026 INIJO</p>
+        </footer>
     </div>
 
     <script>
+        window.onload = () => document.getElementById('pinInput').focus();
+
         async function checkPin() {
-            const pin = document.getElementById('pinInput').value;
-            const btn = document.querySelector('button');
+            const pinInput = document.getElementById('pinInput');
+            const pin = pinInput.value;
+            const btn = document.getElementById('btnMasuk');
             const err = document.getElementById('errMsg');
 
-            btn.innerText = "CHECKING...";
+            if (!pin) return;
+
+            btn.innerText = "MEMERIKSA...";
+            btn.disabled = true;
             err.classList.add('hidden');
             
             try {
-                const response = await fetch(`/api/base?pin=${pin}`);
+                const response = await fetch(`/api/base`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: pin })
+                });
+
                 const data = await response.json();
 
                 if (response.ok) {
@@ -49,40 +152,95 @@
                 } else {
                     err.classList.remove('hidden');
                     btn.innerText = "MASUK";
+                    btn.disabled = false;
+                    pinInput.value = "";
+                    pinInput.focus();
                 }
             } catch (e) {
-                alert("Terjadi kesalahan koneksi");
+                alert("Kesalahan koneksi.");
                 btn.innerText = "MASUK";
+                btn.disabled = false;
             }
         }
 
-        function showMenu(data) {
+        function showMenu(categories) {
             document.getElementById('loginSection').classList.add('hidden');
+            // Menghapus item-center jika ingin align top, tapi instruksi minta di tengah, 
+            // jadi kita biarkan container body mengurus penempatan center.
+            
             const menuSection = document.getElementById('menuSection');
             const container = document.getElementById('linkContainer');
             menuSection.classList.remove('hidden');
 
-            data.forEach(group => {
-                let html = `
-                    <div class="bg-zinc-900 p-6 rounded-3xl border border-zinc-800 shadow-lg">
-                        <h2 class="text-sm font-black text-amber-500/80 uppercase tracking-[0.2em] mb-4 border-b border-zinc-800 pb-2">${group.category}</h2>
-                        <div class="space-y-2">
-                `;
+            let globalCounter = 1;
 
-                group.links.forEach(link => {
-                    html += `
-                        <a href="${link.url}" target="_blank" class="block py-2.5 pr-2.5 pl-[15px] bg-zinc-950/50 hover:bg-zinc-800 hover:text-amber-500 rounded-xl font-semibold text-sm transition-all border border-zinc-800/50 text-zinc-300">
-                            ${link.name}
-                        </a>
+            categories.forEach(cat => {
+                let sectionHtml = `
+                    <section>
+                        <div class="flex items-center gap-3 mb-4">
+                            <h2 class="category-header uppercase">${cat.category}</h2>
+                            <div class="h-[1px] flex-grow bg-gradient-to-r from-yellow-400/30 to-transparent"></div>
+                        </div>
+                        <div class="grid gap-2"> `;
+
+                cat.links.forEach(link => {
+                    let iconDisplay = '';
+                    if (link.icon && (link.icon.includes('fi-') || link.icon.includes('fa-'))) {
+                        iconDisplay = `<i class="${link.icon} text-base" style="color: ${link.iconColor || '#FFFFFF'}"></i>`;
+                    } else {
+                        iconDisplay = `<span class="text-base font-black text-white">${link.icon || ''}</span>`;
+                    }
+
+                    const hasUrl = link.url && link.url !== "";
+                    const wrapperTag = hasUrl ? 'a' : 'div';
+                    const wrapperAttr = hasUrl ? `href="${link.url}" target="_blank"` : '';
+
+                    let subLinksHtml = '';
+                    if (link.subLinks && link.subLinks.length > 0) {
+                        subLinksHtml = `<div class="flex flex-wrap gap-2 mt-2">`;
+                        link.subLinks.forEach(sub => {
+                            const subTag = sub.url ? 'a' : 'div';
+                            const subAttr = sub.url ? `href="${sub.url}" target="_blank"` : 'class="opacity-50 cursor-not-allowed"';
+                            subLinksHtml += `
+                                <${subTag} ${subAttr} class="pill-link rounded-lg flex items-center gap-1.5">
+                                    <i class="fa-solid fa-file text-[9px]"></i> ${sub.label}
+                                </${subTag}>`;
+                        });
+                        subLinksHtml += `</div>`;
+                    }
+
+                    sectionHtml += `
+                        <div class="work-card rounded-[18px] shadow-lg">
+                            <div class="flex items-start gap-3">
+                                <div class="num-badge w-6 pt-2">${String(globalCounter++).padStart(2, '0')}</div>
+                                <div class="flex-grow">
+                                    <div class="flex items-center justify-between">
+                                        <${wrapperTag} ${wrapperAttr} class="flex items-center gap-3 flex-grow title-link">
+                                            <div class="w-9 h-9 bg-white/[0.03] rounded-xl flex items-center justify-center border border-white/10 shrink-0">
+                                                ${iconDisplay}
+                                            </div>
+                                            <div>
+                                                <h3 class="text-[14px] font-bold text-white leading-tight transition-colors duration-200">${link.title}</h3>
+                                                ${link.info ? `<p class="info-text text-[11px] font-medium text-gray-400 mt-1 leading-normal">${link.info}</p>` : ''}
+                                            </div>
+                                        </${wrapperTag}>
+                                        <div class="text-gray-800 ml-2">
+                                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                                        </div>
+                                    </div>
+                                    ${subLinksHtml}
+                                </div>
+                            </div>
+                        </div>
                     `;
                 });
 
-                html += `</div></div>`;
-                container.innerHTML += html;
+                sectionHtml += `</div></section>`;
+                container.innerHTML += sectionHtml;
             });
         }
-        
-        document.getElementById('pinInput').addEventListener('keypress', function (e) {
+
+        document.getElementById('pinInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') checkPin();
         });
     </script>
