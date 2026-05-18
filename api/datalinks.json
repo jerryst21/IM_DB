@@ -19,6 +19,7 @@
     {
       "category": "CODING",
       "links": [
+        { "title": "Emoji ", "url": "https://emojidb.org/smile-emojis?utm_source=user_search", "icon": "fa-regular fa-face-smile" },
         { "title": "Editor & Viewer ", "url": "https://htmleditor.gitlab.io/", "icon": "fa-solid fa-pen-to-square" },
         { "title": "Compare Text", "url": "https://www.textcompare.org/", "icon": "fa-solid fa-code-compare" },
         { "title": "Code Pen-Format Code", "url": "https://codepen.io/pen/?editors=1000", "icon": "fa-solid fa-wand-magic-sparkles" },
